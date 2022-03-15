@@ -18,16 +18,20 @@ int main(int argc, char** argv)
 
     if (command == UNKONOWN_CMD)
         return UnknownCommand(db, argc, argv);
-    else if (command == INSERT_UPDATE_CMD)
+    if (command == INSERT_UPDATE_CMD)
         return InsertUpdateCommand(db, argc, argv);
-    else if (command == PRINT_ALL_CMD)
+    if (command == PRINT_ALL_CMD)
         return PrintAllCommand(db, argc, argv);
-    else if (command == TOP_CMD)
+    if (command == TOP_CMD)
         return TopCommand(db, argc, argv);
-    else if (command == UNFINISHED_CMD)
+    if (command == UNFINISHED_CMD)
         return UnfinishedCommand(db, argc, argv);
-    else if (command == TEST_CMD)
+    if (command == UNREAD_CMD)
+        return UnreadCommand(db, argc, argv);
+    if (command == FIND_CMD)
+        return FindCommand(db, argc, argv);
+    if (command == TEST_CMD)
         return TestCommand(db, argc, argv);
 
-    return QuitOnSuccess(db);
+    return QuitOnError(db);
 }

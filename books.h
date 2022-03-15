@@ -20,6 +20,7 @@
 #define TOP_CMD_STR         ("--top")
 #define UNFINISHED_CMD_STR  ("--reading")
 #define UNREAD_CMD_STR      ("--unread")
+#define FIND_CMD_STR        ("--find")
 
 extern const char* COL_NAMES[];
 extern const char* STATUS_STRINGS[];
@@ -38,7 +39,7 @@ struct Book
 
 enum STATUS
 {
-    STATUS_UNKONOWN, UNREAD, READING, READ,
+    STATUS_UNKONOWN = 100, UNREAD, READING, READ,
 };
 
 enum COL_NAME
@@ -48,31 +49,35 @@ enum COL_NAME
 
 enum COMMAND
 {
-    UNKONOWN_CMD, INSERT_UPDATE_CMD, PRINT_ALL_CMD, TOP_CMD, UNFINISHED_CMD, UNREAD_CMD, TEST_CMD,
+    UNKONOWN_CMD, INSERT_UPDATE_CMD, PRINT_ALL_CMD, TOP_CMD,
+    UNFINISHED_CMD, UNREAD_CMD, FIND_CMD, TEST_CMD,
 };
 
-int BookInit(Book* book, char* name, int score, STATUS status);
-int BookInitFromStrings(Book* book, int count, char** strings);
-Book* BookCreate(const char* name, int score, STATUS status);
-void BookDestroyWRAP(void* book);
-int InsertBook(sqlite3* db, const Book* book);
-int FindBook(sqlite3* db, const Book* book);
-int UpdateBook(sqlite3* db, const Book* book);
-Deck* SelectAllBooks(sqlite3* db);
-Deck* SelectTopRated(sqlite3* db, int count);
-Deck* SelectUnread(sqlite3* db, int count);
-Deck* SelectUnfinished(sqlite3* db, int count);
-void PrintBookWRAP(const void* book);
-void PrintHeader();
-void PrintResultTable(const Deck* books);
+int     BookInit(Book* book, char* name, int score, STATUS status);
+int     BookInitFromStrings(Book* book, int count, char** strings);
+Book*   BookCreate(const char* name, int score, STATUS status);
+void    BookDestroyWRAP(void* book);
+int     InsertBook(sqlite3* db, const Book* book);
+int     FindBook(sqlite3* db, const Book* book);
+int     UpdateBook(sqlite3* db, const Book* book);
+Deck*   SelectAllBooks(sqlite3* db);
+Deck*   SelectTopRated(sqlite3* db, int count);
+Deck*   SelectUnread(sqlite3* db, int count);
+Deck*   SelectUnfinished(sqlite3* db, int count);
+Deck*   SelectFind(sqlite3* db, const char* pattern);
+void    PrintBookWRAP(const void* book);
+void    PrintHeader();
+void    PrintResultTable(const Deck* books);
 COMMAND ParseCommand(int argc, char** argv);
-int UnknownCommand(sqlite3* db, int argc, char** argv);
-int InsertUpdateCommand(sqlite3* db, int argc, char** argv);
-int TopCommand(sqlite3* db, int argc, char** argv);
-int UnfinishedCommand(sqlite3* db, int argc, char** argv);
-int PrintAllCommand(sqlite3* db, int argc, char** argv);
-int TestCommand(sqlite3* db, int argc, char** argv);
-int QuitOnSuccess(sqlite3* db);
-int QuitOnError(sqlite3* db);
+int     UnknownCommand(sqlite3* db, int argc, char** argv);
+int     InsertUpdateCommand(sqlite3* db, int argc, char** argv);
+int     TopCommand(sqlite3* db, int argc, char** argv);
+int     UnreadCommand(sqlite3* db, int argc, char** argv);
+int     UnfinishedCommand(sqlite3* db, int argc, char** argv);
+int     PrintAllCommand(sqlite3* db, int argc, char** argv);
+int     TestCommand(sqlite3* db, int argc, char** argv);
+int     FindCommand(sqlite3* db, int argc, char** argv);
+int     QuitOnSuccess(sqlite3* db);
+int     QuitOnError(sqlite3* db);
 
 #endif

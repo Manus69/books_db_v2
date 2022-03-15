@@ -36,6 +36,9 @@ void PrintBookWRAP(const void* book)
 
 void PrintResultTable(const Deck* books)
 {
-    PrintHeader();
-    PrintDeck(books, PrintBookWRAP);
+    if (DeckNItems(books))
+    {
+        PrintHeader();
+        PrintDeck(books, PrintBookWRAP);
+    }
 }

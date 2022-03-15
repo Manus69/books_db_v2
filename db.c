@@ -9,6 +9,7 @@
 #define SELECT_BY_INT_FIELD_SQL_FORMAT  ("select * from %s where %s == %d limit %d")
 #define SELECT_ORDER_SQL_FORMAT         ("select * from %s order by %s limit %d")
 #define SELECT_ORDER_WHERE_SQL_FORMAT   ("select * from %s where %s == %d order by %s desc limit %d")
+#define SELECT_FIND_SQL_FORMAT          ("select * from %s where %s like '%%""%s""%%'")
 
 static char* _prep_query(Uint size)
 {
@@ -88,6 +89,16 @@ char* get_select_ordered_with_condition_query(const char* col_name, int value, c
 
     query = _prep_query(BUFFER_SIZE);
     sprintf(query, SELECT_ORDER_WHERE_SQL_FORMAT, TABLE_NAME, col_name, value, order_by, limit);
+
+    return query;
+}
+
+char* get_select_find_query(const char* col_name, const char* pattern)
+{
+    char* query;
+
+    query = _prep_query(BUFFER_SIZE);
+    sprintf(query, SELECT_FIND_SQL_FORMAT, TABLE_NAME, col_name, pattern);
 
     return query;
 }
@@ -176,7 +187,7 @@ Deck* SelectTopRated(sqlite3* db, int count)
 {
     char* query;
 
-    query = get_select_ordered_query("score", count);
+    query = get_select_ordered_query(COL_NAMES[SCORE_COL], count);
 
     return select(db, query);
 }
@@ -185,7 +196,25 @@ Deck* SelectUnfinished(sqlite3* db, int count)
 {
     char* query;
 
-    query = get_select_ordered_with_condition_query("status", 2, "score", count);
+    query = get_select_ordered_with_condition_query(COL_NAMES[STATUS_COL], 2, COL_NAMES[SCORE_COL], count);
+
+    return select(db, query);
+}
+
+Deck* SelectUnread(sqlite3* db, int count)
+{
+    char* query;
+
+    query = get_select_ordered_with_condition_query(COL_NAMES[STATUS_COL], 1, COL_NAMES[SCORE_COL], count);
+
+    return select(db, query);
+}
+
+Deck* SelectFind(sqlite3* db, const char* pattern)
+{
+    char* query;
+
+    query = get_select_find_query(COL_NAMES[NAME_COL], pattern);
 
     return select(db, query);
 }

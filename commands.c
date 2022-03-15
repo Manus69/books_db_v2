@@ -15,10 +15,12 @@ COMMAND ParseCommand(int argc, char** argv)
         return TOP_CMD;
     if (strcmp(argv[1], UNREAD_CMD_STR) == 0)
         return UNREAD_CMD;
-    if (strcmp(argv[1], TEST_CMD_STR) == 0)
-        return TEST_CMD;
     if (strcmp(argv[1], UNFINISHED_CMD_STR) == 0)
         return UNFINISHED_CMD;
+    if (strcmp(argv[1], FIND_CMD_STR) == 0)
+        return FIND_CMD;
+    if (strcmp(argv[1], TEST_CMD_STR) == 0)
+        return TEST_CMD;
 
     return INSERT_UPDATE_CMD;
 }
@@ -81,6 +83,11 @@ int UnfinishedCommand(sqlite3* db, int argc, char** argv)
     return _select_with_count_command(db, argc, argv, SelectUnfinished);
 }
 
+int UnreadCommand(sqlite3* db, int argc, char** argv)
+{
+    return _select_with_count_command(db, argc, argv, SelectUnread);
+}
+
 int PrintAllCommand(sqlite3* db, int argc, char** argv)
 {
     Deck* books;
@@ -97,13 +104,21 @@ int PrintAllCommand(sqlite3* db, int argc, char** argv)
 
 int TestCommand(sqlite3* db, int argc, char** argv)
 {
-    // Book    book;
-    // int     status;
-    
-    // status = BookInitFromStrings(&book, argc - 1, argv + 1);
-    // void* ptr = &book;
-    // PrintBookWRAP(&ptr);
-
-    // return QuitOnSuccess(db);
     return PrintAllCommand(db, argc, argv);
+}
+
+int FindCommand(sqlite3* db, int argc, char** argv)
+{
+    char* pattern;
+    Deck* books;
+
+    if (argc != 3)
+        return QuitOnError(db);
+    
+    pattern = argv[2];
+    books = SelectFind(db, pattern);
+    PrintResultTable(books);
+    DeckDestroy(books);
+
+    return QuitOnSuccess(db);
 }

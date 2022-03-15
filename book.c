@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-char* input_strings[] = {"unknown","not read,unread", "not finished,reading", "finished,read", 0};
+char* input_strings[] = {"unknown","not read,unread",
+                        "not finished,reading,unfinished",
+                        "finished,read", 0};
 
 int BookInit(Book* book, char* name, int score, STATUS status)
 {
@@ -132,18 +134,24 @@ int BookInitFromStrings(Book* book, int count, char** strings)
     char*   name;
 
     if (count == 1)
-        return BookInit(book, strings[0], SCORE_DEFAULT, STATUS_DEFAULT);
-    
-    if (count != 3)
-        return WHY_ERROR;
-
-    score = score_from_string(strings[1]);
-    status = status_from_string(strings[2]);
+    {
+        name = strings[0];
+        score = SCORE_DEFAULT;
+        status = STATUS_DEFAULT;
+    }
+    else if (count == 3)
+    {
+        score = score_from_string(strings[1]);
+        status = status_from_string(strings[2]);
+        name = get_book_name(strings[0]);
+    }
+    else return WHY_ERROR;
 
     if (score == WHY_ERROR || status == STATUS_UNKONOWN)
         return WHY_ERROR;
-    
-    name = get_book_name(strings[0]);
 
+    if (StringStartsWith(name, "--"))
+        return WHY_ERROR;
+    
     return BookInit(book, name, score, status);
 }
