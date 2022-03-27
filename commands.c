@@ -25,12 +25,31 @@ COMMAND ParseCommand(int argc, char** argv)
     return INSERT_UPDATE_CMD;
 }
 
+static char* _get_all_commands()
+{
+    char* result;
+
+    result = StringJoinVariadic("Commands:\n", ALL_CMD_STR, "\n",
+                                TOP_CMD_STR, "\n",
+                                FIND_CMD_STR, "\n",
+                                UNREAD_CMD_STR, "\n",
+                                UNFINISHED_CMD_STR, "\n", NULL);
+
+    return result;
+}
+
 int UnknownCommand(sqlite3* db, int argc, char** argv)
 {
+    char* str;
+
     (void)argc;
     (void)argv;
 
     fprintf(stderr, "%s\n", USAGE_MSG);
+    str = _get_all_commands();
+    fprintf(stderr, "%s\n", str);
+    free(str);
+
     return QuitOnError(db);
 }
 

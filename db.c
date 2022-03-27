@@ -7,7 +7,7 @@
 #define FIND_SQL_FORMAT                 ("select 1 from %s where %s == '%s'")
 #define SELECT_ALL_SQL_FORMAT           ("select * from %s limit %d")
 #define SELECT_BY_INT_FIELD_SQL_FORMAT  ("select * from %s where %s == %d limit %d")
-#define SELECT_ORDER_SQL_FORMAT         ("select * from %s order by %s limit %d")
+#define SELECT_ORDER_SQL_FORMAT         ("select * from %s order by %s desc limit %d")
 #define SELECT_ORDER_WHERE_SQL_FORMAT   ("select * from %s where %s == %d order by %s desc limit %d")
 #define SELECT_FIND_SQL_FORMAT          ("select * from %s where %s like '%%""%s""%%'")
 

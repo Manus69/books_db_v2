@@ -2,8 +2,8 @@
 
 #include <stdio.h>
 
-#define NAME_FIELD_WIDTH        (20)
-#define NAME_FIELD_NCHARS       (20)
+#define NAME_FIELD_WIDTH        (30)
+#define NAME_FIELD_NCHARS       (30)
 #define SCORE_FIELD_WIDTH       (5)
 #define STATUS_FIELD_WIDTH      (5)
 #define NAME_FORMAT             ("%-*.*s")
@@ -11,7 +11,7 @@
 #define SCORE_HEADER_FORMAT     ("| %s |")
 #define STATUS_HEADER_FORMAT    (" %s")
 #define STATUS_FORMAT           (" %s")
-#define SEPARATOR               ("-----------------------------------------")
+#define SEPARATOR               ("---------------------------------------------")
 
 void PrintHeader()
 {
